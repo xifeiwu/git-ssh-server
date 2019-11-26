@@ -27,6 +27,3 @@ PermitUserEnvironment           no
 PidFile                         {{config_dir}}/run/sshd.pid
 PermitTunnel                    no
 Banner                          none
-{{~#if user}}
-AllowUsers {{user}}
-{{/if~}}

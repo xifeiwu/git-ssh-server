@@ -3,6 +3,9 @@
 var util  = require('util');
 var spawn = require('child_process').spawn;
 
+const loggerFactory = require('../lib/logger-factory.js');
+const logger = loggerFactory('ssh:auth');
+
 if (process.argv.length < 5) {
   throw new Error("Usage: git-ssh-server-auth <auth-path-file> <username> <fingerprint>")
 }
@@ -37,14 +40,16 @@ var authObj = { action : /upload/.test(command) ? "read" : "write"
               , repo   : repo
               , user   : { name : user, key: fingerprint } };
 
+logger(authObj);
+logger(`process.env.SSH_ORIGINAL_COMMAND: ${process.env.SSH_ORIGINAL_COMMAND}`);
+
 authorize(authObj, function (err, path) {
   if (err) {
     console.error("Insufificient access rights. Failed with: "+err.toString());
     process.exit(1);
   }
   console.error("cmd: "+command+ " " + path);
-  var child = spawn(command, authObj.action === "read" ? 
-                [path] : ['--stirct', '--timeout=5', path], {detached:true});
+  var child = spawn(command, [path], {detached:true});
   child.on('exit', function(rc) {
     process.exit(rc);
   });

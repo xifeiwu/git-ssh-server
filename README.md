@@ -1,5 +1,11 @@
 This library makes it easy to implement a custom ssh server (atop sshd) that handles git commands. You only need to implement an authorization module, and voila!
 
+## command 
+
+node ./bin/git-ssh-server config ssh_config --host 0.0.0.0 --sshd=/usr/sbin/sshd
+
+node bin/git-ssh-server add-user ssh_config wxf ~/id_rsa.pub
+
 ## The short
 
 ```shell
